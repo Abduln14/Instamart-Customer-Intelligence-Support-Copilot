@@ -1,0 +1,26 @@
+scenario | status | refund_inr | model_calls | tokens | expected
+S1 | REFUND | 128.25 | 5 | 1037 | REFUND 128.25 -> OK
+S2 | REFUND | 135.00 | 5 | 1037 | REFUND 135.00 -> OK
+S3 | ESCALATE | 1999.00 | 5 | 1024 | ESCALATE 1999.00 -> OK
+S4 | DENIED | 0.00 | 4 | 717 | DENIED 0.00 -> OK
+S5 | DENIED | 0.00 | 3 | 421 | DENIED 0.00 -> OK
+S6 | NOT_FOUND | 0.00 | 2 | 128 | NOT_FOUND 0.00 -> OK
+S7 | FALLBACK_MAX_ITERATIONS | 0.00 | 6 | 3168 | FALLBACK 0.00 -> OK
+
+--- stop-safely demos (S1) ---
+token_limit=200 -> FALLBACK_TOKEN_LIMIT | tokens_used 438 | steps executed ['get_order', 'search_policy']
+  final_answer: HANDOFF to human agent: token limit 200 exceeded (438 used). Tools run so far: get_order, search_policy. Request: My order ORD-100048 reached me very late. I would like a refund.
+time_limit_seconds=0 -> FALLBACK_TIMEOUT | model calls 0 | steps 0
+  final_answer: HANDOFF to human agent: time limit of 0s reached. Tools run so far: none. Request: My order ORD-100048 reached me very late. I would like a refund.
+
+--- crash and resume (S1) ---
+crashed: simulated crash after tool #2
+checkpoint tools_executed: ['get_order', 'search_policy'] | step 2 | tokens_used 158
+tools executed across crash + resume: ['get_order', 'search_policy', 'calculate_refund', 'issue_refund']
+final status REFUND refund 128.25 | model calls 5
+
+ledger lines: 4
+  issue_refund ORD-100048 128.25 S1
+  issue_refund ORD-100067 135.0 S2
+  escalate_to_human ORD-100145 1999.0 S3
+  issue_refund ORD-100048 128.25 S1_crash_resume

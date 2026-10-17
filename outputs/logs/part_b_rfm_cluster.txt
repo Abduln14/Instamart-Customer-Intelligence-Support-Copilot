@@ -1,0 +1,27 @@
+customers: 1175
+recency median 19.0 min 0 max 180
+frequency mean 9.46 max 33
+monetary mean 2552.06 max 14766.55
+
+  K  inertia  silhouette
+ 2 1820.761       0.465
+ 3 1268.235       0.445
+ 4  743.071       0.526
+ 5  617.367       0.480
+ 6  503.171       0.482
+ 7  408.460       0.416
+ 8  366.503       0.412
+
+segment profile (K=4):
+             size  recency  frequency  monetary
+segment_id                                    
+0            436    28.86       3.77   1057.62
+1            138    24.12       6.77   7129.70
+2            419     8.77      19.40   3410.02
+3            182   109.04       2.20    685.99
+
+names: {1: 'Premium High-Spenders', 2: 'Loyal Regulars', 0: 'Occasional Buyers', 3: 'Lapsing / At-Risk'}
+premium segment id: 1 size: 138
+
+PCA explained_variance_ratio_: [0.634 0.218] total 0.852
+wrote outputs/customer_segments.csv (1175, 7)

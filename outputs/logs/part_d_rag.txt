@@ -1,0 +1,18 @@
+overlap=10: chunks=15 {'refund_policy.txt': 4, 'delivery_policy.txt': 3, 'escalation_policy.txt': 3, 'payment_policy.txt': 3, 'privacy_policy.txt': 2}
+  answerable: expected_doc in top-3 12/12 | expected_fact in answer 12/12 | unanswerable fallback 2/2
+
+query 'refund policy late delivery' top-3:
+  refund_policy.txt score=0.272
+  refund_policy.txt score=0.251
+  refund_policy.txt score=0.245
+
+example answer: ('A refund above INR 1000 must be approved by a human support lead before money is returned.', ['refund_policy.txt', 'refund_policy.txt', 'refund_policy.txt'])
+
+overlap=0: chunks=13 {'delivery_policy.txt': 3, 'payment_policy.txt': 3, 'refund_policy.txt': 3, 'escalation_policy.txt': 2, 'privacy_policy.txt': 2}
+  answerable: expected_doc in top-3 12/12 | expected_fact in answer 10/12 | unanswerable fallback 2/2
+  FAIL: What delivery time makes a completed order eligible for a full refund? -> doc_in_top3=True fact_in_answer=False
+        answer: receives a full refund of the order amount.
+  FAIL: How soon is money returned when a payment fails but is deducted? -> doc_in_top3=True fact_in_answer=False
+        answer: If a payment fails but money is deducted, the amount is returned automatically
+ 
+1000 must be approved by a human support lead before money is returned.
