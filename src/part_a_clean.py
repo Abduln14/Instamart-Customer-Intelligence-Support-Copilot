@@ -65,7 +65,6 @@ n_bad_age = int(((c["age"] < 10) | (c["age"] > 100)).sum())
 c.loc[(c["age"] < 10) | (c["age"] > 100), "age"] = np.nan
 n_missing_age = int(c["age"].isna().sum())
 c["age"] = c["age"].fillna(c.groupby("city")["age"].transform("median"))
-c["age"] = c["age"].round().astype(int)  # city medians can be x.5 -> whole years
 c["signup_date"] = pd.to_datetime(c["signup_date"])
 print(f"(c) impossible ages set to missing: {n_bad_age}; total missing ages filled with city median: {n_missing_age}")
 print("cities:", c["city"].value_counts().to_dict())

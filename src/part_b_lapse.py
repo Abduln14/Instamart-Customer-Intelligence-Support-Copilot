@@ -124,7 +124,6 @@ te = Xte.copy(); te["lapse_probability"] = final.predict_proba(Xte)[:, 1]; te["a
 te["is_premium"] = seg.is_premium.reindex(te.index).fillna(False).astype(bool)
 prem = te[te.is_premium].sort_values("lapse_probability", ascending=False)
 top = prem.head(10).rename_axis("customer_id").reset_index()[["customer_id", "lapse_probability", "actually_lapsed"]]
-top["lapse_probability"] = top.lapse_probability.round(4)
 top.to_csv("outputs/retention_list.csv", index=False)
 print(f"premium customers in test set: {len(prem)} | retention list rows: {len(top)} | truly lapsed: {int(top.actually_lapsed.sum())}")
 print(top.to_string(index=False))

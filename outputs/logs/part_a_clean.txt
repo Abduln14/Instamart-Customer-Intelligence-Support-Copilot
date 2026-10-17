@@ -56,7 +56,7 @@ customers: blank gender: 30
 (c) impossible ages set to missing: 6; total missing ages filled with city median: 67
 cities: {'Pune': 227, 'Delhi': 210, 'Bengaluru': 197, 'Chennai': 191, 'Hyderabad': 191, 'Mumbai': 184}
 genders: {'female': 610, 'male': 560, 'unknown': 30}
-missing ages: 0 | age range: 18 - 60
+missing ages: 0 | age range: 18.0 - 60.0
 
 ######## CLEAN ORDERS ########
 category medians used: {'Dairy': 25.0, 'Electronics': 25.0, 'Grocery': 25.0, 'Personal Care': 25.5, 'Snacks': 25.0}

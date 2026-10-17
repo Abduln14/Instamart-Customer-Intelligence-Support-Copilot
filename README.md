@@ -72,7 +72,7 @@ Customers:
 | (a) city: `strip()` then `title()` | 24 spellings become exactly 6 cities |
 | (b) gender mapped to male / female / unknown (blank = unknown) | 10 spellings become 3 values; 30 unknown |
 | (c) ages outside 10 to 100 set to missing | 6 values (280, -4, 0, 150, 999, 200) |
-| (c) all missing ages filled with the median age of the customer's city (`groupby().transform("median")`, rounded to whole years) | 67 values (61 blank + 6 impossible) |
+| (c) all missing ages filled with the median age of the customer's city (`groupby().transform("median")`; the Hyderabad and Mumbai medians are 37.5 and 38.5 and are used as they are) | 67 values (61 blank + 6 impossible) |
 | (d) signup_date converted to datetime | 1,200 values |
 
 Orders, applied in this order:
@@ -215,15 +215,15 @@ Recall moved most (+0.202); precision fell slightly (-0.055). For the retention 
 
 ### Interpretation, persistence and retention list
 
-Top five random-forest importances: frequency 0.280, monetary 0.271, recency 0.115, avg_delivery_minutes 0.061, cancel_rate 0.053. Business reading: how often and how much a customer has bought dominate the prediction, then how recently; slow deliveries and cancellations add a little.
+Top five random-forest importances: frequency 0.280, monetary 0.271, recency 0.115, avg_delivery_minutes 0.061, cancel_rate 0.052. Business reading: how often and how much a customer has bought dominate the prediction, then how recently; slow deliveries and cancellations add a little.
 
 Logistic-regression coefficients (on standardised features):
 
 | Feature | Coefficient | Business reading |
 |---|---|---|
-| frequency | -1.697 | Customers who order often are much less likely to lapse |
-| monetary | +0.283 | For the same number of orders, bigger total spend goes with more lapsing (big, rare purchases such as electronics) |
-| recency | +0.039 | A longer gap since the last order slightly raises lapse risk once frequency is accounted for |
+| frequency | -1.698 | Customers who order often are much less likely to lapse |
+| monetary | +0.285 | For the same number of orders, bigger total spend goes with more lapsing (big, rare purchases such as electronics) |
+| recency | +0.040 | A longer gap since the last order slightly raises lapse risk once frequency is accounted for |
 
 The selected pipeline was saved with `joblib.dump` to `outputs/lapse_model.joblib`; the reloaded model reproduces the original test predictions and probabilities exactly (checked in code).
 

@@ -22,28 +22,28 @@ change: precision -0.055 recall +0.202 F1 +0.049
 top-5 random-forest feature importances:
  frequency               0.2796
 monetary                0.2712
-recency                 0.1152
-avg_delivery_minutes    0.0612
-cancel_rate             0.0525
+recency                 0.1151
+avg_delivery_minutes    0.0613
+cancel_rate             0.0523
 
 LR coefficients (standardised features):
-  recency: +0.039
-  frequency: -1.697
-  monetary: +0.283
+  recency: +0.040
+  frequency: -1.698
+  monetary: +0.285
   cancel_rate: -0.124
-  avg_discount_pct: +0.005
+  avg_discount_pct: +0.004
   tenure_days: -0.050
 
 reloaded model reproduces test predictions exactly: True
 premium customers in test set: 40 | retention list rows: 10 | truly lapsed: 1
 customer_id  lapse_probability  actually_lapsed
-      C0862             0.4872                0
-      C1112             0.4841                0
-      C0060             0.4798                0
-      C0802             0.4798                0
-      C1008             0.4760                0
-      C1000             0.4604                0
-      C0525             0.4579                1
-      C0133             0.4559                0
-      C0267             0.4523                0
-      C0167             0.4522                0
+      C0862           0.491035                0
+      C1112           0.484067                0
+      C0060           0.479796                0
+      C0802           0.479642                0
+      C1008           0.477817                0
+      C1000           0.462420                0
+      C0525           0.459718                1
+      C0133           0.456237                0
+      C0267           0.452514                0
+      C0167           0.452159                0
