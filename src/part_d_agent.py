@@ -307,6 +307,15 @@ def escalate_to_human(order_id, refund_inr=None, idempotency_key=None):
     order, eligible_amt, err = _validate_order_for_refund(order_id)
     if err:
         return {"error": err, "refund_inr": 0.0, "status": "rejected", "order_id": order_id}
+    
+    # Escalation is only for refunds above the automatic refund limit.
+    if eligible_amt <= 1000.0:
+        return {
+            "error": f"refund amount INR {eligible_amt:.2f} does not exceed the automatic limit of INR 1000",
+            "refund_inr": 0.0,
+            "status": "rejected",
+            "order_id": order_id
+        }
 
     if refund_inr is not None:
         try:
