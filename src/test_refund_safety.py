@@ -64,7 +64,7 @@ TEST_ORDERS = [
 
 def run_security_tests():
     print("\n" + "=" * 80)
-    print(" INSTAMART COPILOT - 13 MANDATORY REFUND SAFETY & IDEMPOTENCY TESTS")
+    print(" INSTAMART COPILOT - 14 REFUND SAFETY & IDEMPOTENCY TESTS")
     print("=" * 80)
 
     # ── Snapshot production DB and ledger state before tests ─────────────────
@@ -159,6 +159,16 @@ def run_security_tests():
 
         # -----------------------------------------------------------------
         # 5. Refund below or equal to INR 1,000 (auto-issued)
+        res5a = escalate_to_human(
+            "ORD-900006", 1000.00,
+            idempotency_key="TEST-KEY-06-ESC"
+        )
+        ok5a = (
+            res5a.get("status") == "rejected" and
+            res5a.get("refund_inr") == 0.0 and
+            "does not exceed" in res5a.get("error", "").lower()
+        )
+        check(14, "Escalation at INR 1,000 rejected", ok5a, str(res5a))	
         # -----------------------------------------------------------------
         res5 = issue_refund("ORD-900006", 1000.00, idempotency_key="TEST-KEY-06")
         ok5 = (res5.get("status") == "recorded" and
@@ -298,7 +308,7 @@ def run_security_tests():
     all_passed = all(r[2] == "PASSED" for r in results)
     print("\n" + "=" * 80)
     if all_passed:
-        print(" ALL 13 REFUND SAFETY & IDEMPOTENCY TESTS PASSED SUCCESSFULLY!")
+        print(" ALL 14 REFUND SAFETY & IDEMPOTENCY TESTS PASSED SUCCESSFULLY!")
     else:
         print(" SOME SECURITY TESTS FAILED!")
     print("=" * 80 + "\n")

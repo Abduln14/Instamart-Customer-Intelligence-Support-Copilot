@@ -370,9 +370,9 @@ With overlap 0, two answerable questions break: "What delivery time makes a comp
 
 | Scenario | Status | Refund (INR) | Model calls | Tokens used |
 |---|---|---|---|---|
-| S1 | REFUND | 128.25 | 5 | 1,037 |
+| S1 | REFUND | 128.25 | 5 | 1,045 |
 | S2 | REFUND | 135.00 | 5 | 1,037 |
-| S3 | ESCALATE | 1,999.00 | 5 | 1,024 |
+| S3 | ESCALATE | 1,999.00 | 5 | 1,032 |
 | S4 | DENIED | 0.00 | 4 | 717 |
 | S5 | DENIED | 0.00 | 3 | 421 |
 | S6 | NOT_FOUND | 0.00 | 2 | 128 |
@@ -396,7 +396,7 @@ A checkpoint (`state/<run_id>.json`: run id, scenario id, full message list, tok
 
 ### ReAct versus plan-and-execute (about 230 words)
 
-Measured ReAct cost: S1 used 5 model calls and 1,037 tokens, S5 (cancelled order) 3 calls and 421 tokens, S6 (unknown order) 2 calls and 128 tokens. Each call re-sends the whole history, so tokens grow with every step; the three policy chunks returned by `search_policy` make later calls much larger.
+Measured ReAct cost: S1 used 5 model calls and 1,045 tokens, S5 (cancelled order) 3 calls and 421 tokens, S6 (unknown order) 2 calls and 128 tokens. Each call re-sends the whole history, so tokens grow with every step; the three policy chunks returned by `search_policy` make later calls much larger.
 
 A plan-and-execute design asks the model once for the full step list and then runs it. For S1 that would need about 2 calls (plan, final summary) and clearly fewer tokens, because the history is not re-sent each step (an estimate; I did not implement it). Its weakness is surprises. The plan is made before the order is known, so for S6 it would still plan `search_policy` and `calculate_refund` on a missing order, and for S5 it would plan a refund calculation that the rules forbid. Each surprise needs a replanning call (at least 3 calls), which removes the saving, plus code to detect "unexpected". ReAct handles both naturally: S6 ends after 2 calls and S5 after 3, because the model reads each observation before choosing the next action.
 
