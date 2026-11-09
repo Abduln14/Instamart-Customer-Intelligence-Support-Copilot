@@ -1,0 +1,829 @@
+/* ==============================================================================
+   INSTAMART COPILOT — PASTEL ADMIN DASHBOARD DESIGN SYSTEM
+   Colour palette inspired by reference screenshot:
+     Page bg:     #F4F4F8  (soft lavender-grey)
+     Sidebar:     #F0F1F5  (light grey)
+     Cards:       #FFFFFF  (pure white)
+     Mint:        #25B98B  (primary accent – success, positive metrics)
+     Mint light:  #DDF5EC  (pale mint tint)
+     Sky blue:    #4BA6D8  (secondary accent – analytics, customers)
+     Blue light:  #E2F2FA  (pale blue tint)
+     Coral red:   #F36D73  (alerts, errors, cancellations)
+     Coral light: #FCE8E9  (pale pink tint)
+     Yellow:      #F4C94E  (warnings, pending)
+     Charcoal:    #34383F  (main text)
+     Grey:        #9298A3  (secondary text)
+     Border:      #E8E9EF  (dividers)
+   ============================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ROOT DESIGN TOKENS
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Page & surface colours */
+    --bg-page:        #F4F4F8;
+    --bg-sidebar:     #F0F1F5;
+    --bg-card:        #FFFFFF;
+    --bg-card-hover:  #FAFAFA;
+
+    /* Border */
+    --border-color:   #E8E9EF;
+    --border-subtle:  #EEEEF3;
+
+    /* Text */
+    --text-primary:   #34383F;
+    --text-secondary: #9298A3;
+    --text-muted:     #B0B5BF;
+
+    /* ── Primary accent: Mint green (success, positive KPIs) */
+    --mint:           #25B98B;
+    --mint-hover:     #1EA07A;
+    --mint-light:     #DDF5EC;
+    --mint-border:    #A8E8D0;
+
+    /* ── Secondary accent: Sky blue (analytics, customers) */
+    --sky:            #4BA6D8;
+    --sky-hover:      #3A95C7;
+    --sky-light:      #E2F2FA;
+    --sky-border:     #A8D8F0;
+
+    /* ── Alert accent: Coral red (errors, cancellations) */
+    --coral:          #F36D73;
+    --coral-hover:    #E05860;
+    --coral-light:    #FCE8E9;
+    --coral-border:   #F8B8BB;
+
+    /* ── Highlight: Soft yellow (warnings, pending) */
+    --yellow:         #F4C94E;
+    --yellow-hover:   #E5B93E;
+    --yellow-light:   #FEF6D9;
+    --yellow-border:  #F8E0A0;
+
+    /* Geometry */
+    --radius-card:    12px;
+    --radius-input:   8px;
+    --radius-pill:    9999px;
+
+    /* Typography */
+    --font-ui:   'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Shadows */
+    --shadow-sm:    0 1px 4px rgba(52, 56, 63, 0.07);
+    --shadow-md:    0 4px 14px -2px rgba(52, 56, 63, 0.09);
+    --shadow-hover: 0 6px 20px -2px rgba(52, 56, 63, 0.12);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   GLOBAL RESET & TYPOGRAPHY
+   ───────────────────────────────────────────────────────────────────────────── */
+html, body, [class*="css"] {
+    font-family: var(--font-ui) !important;
+    color: var(--text-primary);
+    background-color: var(--bg-page) !important;
+}
+
+code, kbd, samp, pre {
+    font-family: var(--font-mono) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   APP BACKGROUND — lavender-grey page
+   ───────────────────────────────────────────────────────────────────────────── */
+.stApp {
+    background-color: var(--bg-page) !important;
+    background-image: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ANIMATIONS
+   ───────────────────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TOP HEADER BAR
+   ───────────────────────────────────────────────────────────────────────────── */
+.top-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 22px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.top-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top-header-breadcrumb {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 2px;
+}
+
+.top-header-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.4px;
+}
+
+.top-header-badges {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Live status pill */
+.status-badge-online {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--mint-light);
+    border: 1px solid var(--mint-border);
+    color: var(--mint);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.3px;
+}
+.status-badge-online::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--mint);
+}
+
+/* User avatar pill */
+.user-avatar-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--sky-light);
+    border: 1px solid var(--sky-border);
+    color: var(--sky);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HERO BANNER CARD — mint glow behind hero area only
+   ───────────────────────────────────────────────────────────────────────────── */
+.saas-hero-card {
+    background: var(--bg-card);
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 28px 32px;
+    margin-bottom: 22px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Subtle mint gradient glow behind hero only */
+.saas-hero-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% -20%, rgba(37, 185, 139, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--mint-light);
+    border: 1px solid var(--mint-border);
+    color: var(--mint);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.hero-main-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.hero-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 760px;
+    line-height: 1.65;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   KPI METRIC CARDS — white cards, pastel icon backgrounds, top accent bar
+   ───────────────────────────────────────────────────────────────────────────── */
+.glass-kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: #CCCDD8;
+}
+
+.glass-kpi-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.glass-kpi-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-secondary);
+}
+
+.glass-kpi-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: var(--mint-light);
+    border: 1px solid var(--mint-border);
+}
+
+.glass-kpi-value {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    animation: countUp 0.4s ease-out;
+}
+
+.glass-kpi-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* Top accent bar on KPI cards */
+.glass-kpi-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--mint);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+/* Accent variants */
+.kpi-accent-primary::before  { background: var(--mint); }
+.kpi-accent-success::before  { background: var(--mint); }
+.kpi-accent-warning::before  { background: var(--yellow); }
+.kpi-accent-danger::before   { background: var(--coral); }
+.kpi-accent-secondary::before{ background: var(--sky); }
+
+/* Icon tint per accent */
+.kpi-accent-warning  .glass-kpi-icon { background: var(--yellow-light); border-color: var(--yellow-border); }
+.kpi-accent-danger   .glass-kpi-icon { background: var(--coral-light);  border-color: var(--coral-border);  }
+.kpi-accent-secondary .glass-kpi-icon { background: var(--sky-light);   border-color: var(--sky-border);    }
+
+/* Trend indicators */
+.trend-up   { color: var(--mint);  font-weight: 700; }
+.trend-down { color: var(--coral); font-weight: 700; }
+.trend-muted{ color: var(--text-secondary); }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   STANDARD CONTENT CARD / PANEL
+   ───────────────────────────────────────────────────────────────────────────── */
+.saas-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease;
+}
+
+.saas-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   RESULT CARD — big mint number output
+   ───────────────────────────────────────────────────────────────────────────── */
+.result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--mint);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    margin: 16px 0;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+}
+
+.result-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.result-card-value {
+    font-family: var(--font-mono);
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--mint);
+    letter-spacing: -0.8px;
+    margin-bottom: 6px;
+}
+
+.result-card-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   STATUS / DECISION BADGES
+   ───────────────────────────────────────────────────────────────────────────── */
+.badge-saas {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 13px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+/* Refund approved → mint */
+.badge-saas-refund {
+    background: var(--mint-light);
+    border: 1px solid var(--mint-border);
+    color: var(--mint);
+}
+
+/* Escalated → yellow */
+.badge-saas-escalate {
+    background: var(--yellow-light);
+    border: 1px solid var(--yellow-border);
+    color: #C49A0A;
+}
+
+/* Denied → coral */
+.badge-saas-denied {
+    background: var(--coral-light);
+    border: 1px solid var(--coral-border);
+    color: var(--coral);
+}
+
+/* Fallback → sky blue */
+.badge-saas-fallback {
+    background: var(--sky-light);
+    border: 1px solid var(--sky-border);
+    color: var(--sky);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CHAT BUBBLES — RAG & Agent pages
+   ───────────────────────────────────────────────────────────────────────────── */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 8px 0;
+}
+
+.chat-bubble {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    animation: fadeIn 0.22s ease-out;
+}
+
+.chat-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+/* User avatar: sky-blue tint */
+.avatar-user {
+    background: var(--sky-light);
+    border: 1px solid var(--sky-border);
+    color: var(--sky);
+}
+
+/* Agent avatar: mint tint */
+.avatar-agent {
+    background: var(--mint-light);
+    border: 1px solid var(--mint-border);
+    color: var(--mint);
+}
+
+.chat-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px 16px;
+    max-width: 88%;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+/* User message: sky-blue tint bubble */
+.chat-content-user {
+    background: var(--sky-light);
+    border-color: var(--sky-border);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TOOL CALL CARD — monospace execution trace
+   ───────────────────────────────────────────────────────────────────────────── */
+.tool-call-card {
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--mint);
+    border-radius: var(--radius-input);
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PII REDACTION CHIPS
+   ───────────────────────────────────────────────────────────────────────────── */
+.pii-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Phone → yellow */
+.pii-chip-phone {
+    background: var(--yellow-light);
+    color: #8B6800;
+    border: 1px solid var(--yellow-border);
+}
+
+/* Email → mint */
+.pii-chip-email {
+    background: var(--mint-light);
+    color: var(--mint);
+    border: 1px solid var(--mint-border);
+}
+
+/* Order ID → sky blue */
+.pii-chip-order {
+    background: var(--sky-light);
+    color: var(--sky);
+    border: 1px solid var(--sky-border);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   STREAMLIT ELEMENT OVERRIDES
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+[data-testid="stSidebar"] > div:first-child {
+    padding-top: 12px !important;
+}
+
+/* ── Radio (nav) items — active gets mint tint ── */
+[data-testid="stSidebar"] .stRadio label {
+    display: flex !important;
+    align-items: center !important;
+    padding: 8px 12px !important;
+    border-radius: var(--radius-input) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+    transition: all 0.15s ease !important;
+    cursor: pointer !important;
+    margin-bottom: 2px !important;
+}
+
+[data-testid="stSidebar"] .stRadio label:hover {
+    background: var(--mint-light) !important;
+    color: var(--mint) !important;
+}
+
+[data-testid="stSidebar"] .stRadio [aria-checked="true"] + div label,
+[data-testid="stSidebar"] .stRadio label[data-checked="true"] {
+    background: var(--mint-light) !important;
+    color: var(--mint) !important;
+    font-weight: 700 !important;
+}
+
+/* Hide the default radio circle */
+[data-testid="stSidebar"] .stRadio [data-baseweb="radio"] > div:first-child {
+    display: none !important;
+}
+
+/* ── Primary Button — mint ── */
+.stButton > button[kind="primary"],
+.stButton > button {
+    background: var(--mint) !important;
+    color: #FFFFFF !important;
+    border: 1px solid var(--mint) !important;
+    border-radius: var(--radius-input) !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 8px 20px !important;
+    box-shadow: 0 1px 3px rgba(37, 185, 139, 0.20) !important;
+    transition: all 0.15s ease !important;
+}
+
+.stButton > button[kind="primary"]:hover,
+.stButton > button:hover {
+    background: var(--mint-hover) !important;
+    border-color: var(--mint-hover) !important;
+    box-shadow: 0 4px 12px rgba(37, 185, 139, 0.28) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── Secondary / outline button ── */
+button[kind="secondary"] {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-input) !important;
+    font-weight: 600 !important;
+    transition: all 0.15s ease !important;
+}
+
+button[kind="secondary"]:hover {
+    background: var(--bg-sidebar) !important;
+    border-color: #CCCDD8 !important;
+}
+
+/* ── Text inputs, textareas, selectboxes ── */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stSelectbox > div > div > div {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-input) !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-ui) !important;
+    font-size: 14px !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus {
+    border-color: var(--mint) !important;
+    box-shadow: 0 0 0 3px rgba(37, 185, 139, 0.14) !important;
+    outline: none !important;
+}
+
+/* ── Tabs ── */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 6px;
+    background: var(--bg-sidebar);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-input) !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+    border: none !important;
+    transition: all 0.15s ease;
+    font-size: 13px !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background: var(--bg-card) !important;
+    color: var(--mint) !important;
+    font-weight: 700 !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* ── Dataframe / Tables ── */
+[data-testid="stDataFrame"] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-card) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 16px 0 !important;
+    font-size: 13px !important;
+    border-radius: var(--radius-card) !important;
+    overflow: hidden !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+thead th {
+    position: sticky !important;
+    top: 0 !important;
+    background: var(--bg-sidebar) !important;
+    color: var(--text-secondary) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    font-size: 11px !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    z-index: 10 !important;
+}
+
+tbody tr {
+    transition: background 0.12s ease !important;
+}
+
+tbody tr:nth-child(even) {
+    background: #FAFAFC !important;
+}
+
+tbody tr:nth-child(odd) {
+    background: var(--bg-card) !important;
+}
+
+tbody tr:hover {
+    background: var(--mint-light) !important;
+}
+
+tbody td {
+    padding: 10px 16px !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ── Sliders ── */
+[data-testid="stSlider"] [data-baseweb="slider"] [data-baseweb="thumb"] {
+    background-color: var(--mint) !important;
+    border-color: var(--mint) !important;
+}
+
+[data-testid="stSlider"] [data-baseweb="slider"] [data-baseweb="track-fill"] {
+    background-color: var(--mint) !important;
+}
+
+/* ── Expander ── */
+[data-testid="stExpander"] summary {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+[data-testid="stExpander"] {
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-input) !important;
+    background: var(--bg-card) !important;
+}
+
+/* ── Checkboxes ── */
+[data-baseweb="checkbox"] [data-checked="true"] {
+    background-color: var(--mint) !important;
+    border-color: var(--mint) !important;
+}
+
+/* ── Info / Warning / Error banners ── */
+[data-testid="stAlert"] {
+    border-radius: var(--radius-input) !important;
+    font-size: 13px !important;
+}
+
+/* ── Spinner ── */
+.stSpinner > div > div {
+    border-top-color: var(--mint) !important;
+}
+
+/* ── Caption / small text ── */
+.stCaption, [data-testid="stCaptionContainer"] {
+    color: var(--text-secondary) !important;
+    font-size: 12px !important;
+}
+
+/* ── Dividers ── */
+hr, [data-testid="stMarkdownContainer"] hr {
+    border-color: var(--border-color) !important;
+    margin: 20px 0 !important;
+}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-page); }
+::-webkit-scrollbar-thumb {
+    background: #C8C9D4;
+    border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover { background: #A0A3B0; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   UTILITY HELPERS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Inline section band (like a table-header row) */
+.section-band {
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-input);
+    padding: 10px 16px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+/* Empty-state placeholder */
+.empty-state {
+    background: var(--bg-sidebar);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 40px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Pastel category dot indicators */
+.dot-mint   { width:8px; height:8px; border-radius:50%; background:var(--mint);  display:inline-block; }
+.dot-sky    { width:8px; height:8px; border-radius:50%; background:var(--sky);   display:inline-block; }
+.dot-coral  { width:8px; height:8px; border-radius:50%; background:var(--coral); display:inline-block; }
+.dot-yellow { width:8px; height:8px; border-radius:50%; background:var(--yellow);display:inline-block; }

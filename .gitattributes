@@ -1,0 +1,35 @@
+# ── Line-ending normalisation ─────────────────────────────────────────────────
+# Git will normalise line endings on check-in and use the platform default on
+# check-out for text files, so Windows clones get CRLF and Linux/Mac get LF.
+* text=auto
+
+# Shell scripts must always have LF endings (bash requires it)
+*.sh text eol=lf
+
+# Windows batch files must always have CRLF endings
+*.bat text eol=crlf
+
+# Python source files: normalise to LF
+*.py text eol=lf
+
+# Markdown and text: normalise to LF
+*.md text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
+*.sql text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+
+# CSS / HTML
+*.css text eol=lf
+
+# Binary files: do not touch line endings
+*.db binary
+*.joblib binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pyc binary
+

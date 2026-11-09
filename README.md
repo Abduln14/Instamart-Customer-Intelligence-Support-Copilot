@@ -17,23 +17,78 @@ Console output of every script is saved in `outputs/logs/` so each reported numb
 
 ## Reproduce
 
-Tested with Python 3.12 (the pinned versions in `requirements.txt` also support Python 3.11) and the SQLite bundled with Python.
+Tested with Python 3.11, 3.12, and 3.13 (Python 3.10+ required) and the SQLite bundled with Python.
 
-1. `python -m venv .venv`
-2. `source .venv/bin/activate` (Windows: `.venv\Scripts\activate`)
-3. `pip install -r requirements.txt`
-4. `python generate_data.py` (last line: `generated: customers=1200 products=40 orders_raw=13084 tickets=164`)
-5. `python src/part_a_clean.py`
-6. `python src/part_a_validate.py` (prints `ALL CHECKPOINTS PASSED`)
-7. `python src/part_a_sql.py`
-8. `python src/part_a_pandas.py`
-9. `python src/part_b_rfm_cluster.py`
-10. `python src/part_b_lapse.py`
-11. `python src/part_c_triage.py`
-12. `python src/part_d_rag.py`
-13. `python src/part_d_agent.py`
+### Quick start — one command runs everything
 
-Run from the repository root. `./reproduce.sh` runs steps 4 to 13 in order. Part B step 10 needs `outputs/customer_segments.csv` from step 9; Part C needs the same file. Part D's agent reads `data/instamart.db` from step 5. Random seeds are fixed (42) everywhere; two full runs produced identical logs.
+```bash
+# 1. Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Run the entire pipeline (all 10 stages in order)
+python run_project.py
+```
+
+`python run_project.py` executes every stage sequentially, streams live terminal output, saves per-stage logs to `outputs/logs/`, measures duration, and prints a final summary table. It exits with code 0 on success and code 1 on failure.
+
+**Pipeline stages (run_project.py runs them in this order):**
+
+| # | Script | What it does |
+|---|---|---|
+| 1 | `generate_data.py` | Generate synthetic data |
+| 2 | `src/part_a_clean.py` | Part A: Data cleaning |
+| 3 | `src/part_a_validate.py` | Part A: Validate checkpoints |
+| 4 | `src/part_a_sql.py` | Part A: SQL queries |
+| 5 | `src/part_a_pandas.py` | Part A: Pandas aggregations |
+| 6 | `src/part_b_rfm_cluster.py` | Part B: RFM clustering |
+| 7 | `src/part_b_lapse.py` | Part B: Lapse prediction model |
+| 8 | `src/part_c_triage.py` | Part C: Ticket triage |
+| 9 | `src/part_d_rag.py` | Part D: Policy RAG |
+| 10 | `src/part_d_agent.py` | Part D: Autonomous agent scenarios |
+
+**Useful flags:**
+
+```bash
+python run_project.py --list           # List all stages and exit
+python run_project.py --only 6 7       # Run only stages 6 and 7
+python run_project.py --from-stage 5   # Run stages 5 through 10
+python run_project.py --keep-going     # Continue past failures
+```
+
+### Launch the interactive dashboard (separately)
+
+```bash
+streamlit run app.py
+# Then open http://localhost:8501 in your browser
+```
+
+The dashboard is completely independent of `run_project.py`. Run the pipeline first so all output files exist, then launch the dashboard.
+
+On Windows you can also use `reproduce.bat` and on Linux/Mac `bash reproduce.sh` — both are thin wrappers around `python run_project.py`.
+
+> **Note:** Random seeds are fixed (42) everywhere. Two consecutive full runs produce identical outputs. Part B step 7 needs `outputs/customer_segments.csv` from step 6; Part D agent reads `data/instamart.db` from step 2.
+
+## Interactive Streamlit Frontend & Dashboard
+
+An interactive web UI is available in `app.py`:
+
+```bash
+# From instamart-copilot/
+streamlit run app.py
+```
+*(Or run `..\run_frontend.bat` from Windows)*
+
+**Features include:**
+1. **Live Support Copilot (Agent)**: Interactive ReAct tool-calling simulator with scenario presets (S1–S7), safety guards, real-time tool traces, and crash-and-resume checkpoint recovery.
+2. **Executive Business Analytics**: Revenue, AOV, order volume KPIs, City-Category spend heatmaps, cumulative revenue curves, and SQLite DB explorer.
+3. **Customer Intelligence & Churn Predictor**: RFM 2D/3D behavioral cluster scatter plots and real-time churn probability scoring with risk gauges using `lapse_model.joblib`.
+4. **Support Ticket Triage Playground**: Live PII redaction (`[PHONE]`, `[EMAIL]`, `[ORDER_ID]`), LLM classification, and automatic queue routing.
+5. **Policy RAG & Knowledge Base**: Semantic search and grounded QA across all store policy documents.
+6. **Audit Ledger & Logs**: Live inspection of `refund_ledger.jsonl` and checkpoint states.
 
 ## Part A
 
@@ -337,7 +392,7 @@ Every fallback returns the steps so far and a short human-handoff summary in `fi
 
 ### Crash and resume
 
-A checkpoint (`state/<run_id>.json`: run id, scenario id, full message list, tokens used, step number, tools executed) is written after every tool observation. For S1 a simulated crash was raised right after the second tool execution, then `resume_agent("S1_crash_resume")` continued from the checkpoint. Tools executed across the crash and the resume, in order: **get_order, search_policy, calculate_refund, issue_refund** (four executions, none repeated). Final status REFUND, INR 128.25, 5 model calls in total. The ledger therefore holds one `issue_refund` for ORD-100048 from run `S1` and one from the separate run `S1_crash_resume` (each ledger line carries its run id).
+A checkpoint (`state/<run_id>.json`: run id, scenario id, full message list, tokens used, step number, tools executed) is written after every tool observation. For S1 a simulated crash was raised right after the second tool execution, then `resume_agent("S1_crash_resume")` continued from the checkpoint. Tools executed across the crash and the resume, in order: **get_order, search_policy, calculate_refund, issue_refund** (four executions, none repeated). Final status REFUND, INR 128.25, 5 model calls in total. Persistent idempotency ensures that the resumed operation (`S1_crash_resume`) reuses the recorded outcome for ORD-100048 without creating a duplicate refund in the ledger. Safe idempotency keys guarantee that retrying a completed operation returns the original result while attempting a new refund for the same order under a different key is strictly rejected.
 
 ### ReAct versus plan-and-execute (about 230 words)
 
